@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <string>
 #include <algorithm>
 using namespace std;
@@ -18,7 +19,7 @@ class hamming{
 				r++;
 				power*=2;
 			}
-            cout<<"power is "<<power<<" r is "<<r<<endl;
+            cout<<"power is "<<power<<" redundant bits are "<<r<<endl;
 			//Allocating memory to our dynamic msg array(Note we are using one based indexing).
 			msg = new char[m+r+1];
 			int curr = 0;
@@ -42,6 +43,29 @@ class hamming{
 			}
 			cout << endl;
 		}
+        void showmsg1(string msg1){
+			cout << "the data modified is ";
+			for(int i = 1 ; i <=m+r ; i++){
+				cout << msg1[i] << " ";
+			}
+			cout << endl;
+		}
+        int bin_to_int(string s){
+            string num = s;
+            int dec_value = 0;
+        
+            // Initializing base value to 1, i.e 2^0
+            int base = 1;
+        
+            int len = m+r;
+            for (int i = len - 1; i >= 0; i--) {
+                if (num[i] == '1')
+                    dec_value += base;
+                base = base * 2;
+            }
+        
+            return dec_value;
+        }
 		void setRedundantBits(){
 			//for first redundant bit, check all those data bits at index where the first bit of index is set(1) similarly for second redundant bit, check all those data bits at index where the second bit of index is set(1), similarly for third redundant bit check all those data bits at index where the third bit of index is set to 1 and so on.
 			int bit = 0;
@@ -62,7 +86,6 @@ class hamming{
 				bit++;
 			}
 			//showing up the message to be sent(data + redundant)
-			showmsg();
 		}
 		void receiver(){
 			//this ans will store the redundant bits, if they were right then according to even parity they will store 0 else if some error was made in a bit it will store 1
@@ -88,22 +111,32 @@ class hamming{
 				}
 				bit++;
 			}
-
+            cout<<ans<<endl;
             char ch;
             cout<<"Do you want to change the bits Y/N -> ";cin>>ch;
 			// if the ans had any occurrence of 1 then there is some fault
 			if(ch=='y' || ch=='Y'){
-                ans[3]-'0'==0 ? ans[3]='1':ans[3]='0';
-                if(ans.find('1') != string::npos){
-                    int power = 1;
-                    int wrongbit = 0;
-                    //evaluating the binary expression of ans variable
-                    for(int i = 0 ; i < ans.size() ; i++){
-                        if(ans[i]=='1') wrongbit+=power;
-                        power*=2;
-                    }
-                    cout << "bit number " << (m+r-wrongbit) << " is wrong and having error " << endl;
-			    }
+                int k= (rand() % (m+r));
+                cout<<"Pos Modified is "<<k<<endl;
+                msg[k]-'0'==0 ? msg[k]='1':msg[k]='0';
+                showmsg();
+                //function call to set the redundant bits
+                cout<<"\t\t Index is "<<k<<endl;
+                msg[k]-'0'==0 ? msg[k]='1':msg[k]='0';
+                showmsg();
+
+                int val=bin_to_int(msg);
+                cout<<"val is "<<val<<" "<<endl;
+                // if(ans.find('1') != string::npos){
+                //     int power = 1;
+                //     int wrongbit = 0;
+                //     //evaluating the binary expression of ans variable
+                //     for(int i = 0 ; i < ans.size() ; i++){
+                //         if(ans[i]=='1') wrongbit+=power;
+                //         power*=2;
+                //     }
+                //     cout << "bit number " << (m+r-wrongbit) << " is wrong and having error " << endl;
+			    // }
             }
 			// if the ans dont have any occurrence of 1 then it is correct
 			else{
@@ -144,6 +177,7 @@ int main(){
     
 	return 0;
 }
+
 //time complexity = O(nlogn) where , n = databits + redundant bits
 /*
 Enter the data string Hello
