@@ -11,6 +11,7 @@ class hamming{
 		hamming(string data){
 			this->data = data;
 			//reversing the data received
+			cout<<"data is "<<data<<endl;
 			m = data.size();
 			int power = 1;
 
@@ -31,34 +32,28 @@ class hamming{
 				}
 				else msg[i] = 'n';
 			}
-            showmsg();
+            showmsg(1);
 			//function call to set the redundant bits
 			setRedundantBits();
 		}
 		//function to show the whole msg
-		void showmsg(){
-			cout << "the data packet to be sent is : ";
+		void showmsg(int a){
+			if(a)cout << "the data packet to be sent is : ";
+			else cout << "the data packet to be Recieved is : ";
 			for(int i = 1 ; i <=m+r ; i++){
 				cout << msg[i] << " ";
 			}
 			cout << endl;
 		}
-        void showmsg1(string msg1){
-			cout << "the data modified is ";
-			for(int i = 1 ; i <=m+r ; i++){
-				cout << msg1[i] << " ";
-			}
-			cout << endl;
-		}
-        int bin_to_int(string s){
-            string num = s;
+        int bin_to_int(){
+            string num = data;
             int dec_value = 0;
         
             // Initializing base value to 1, i.e 2^0
             int base = 1;
         
-            int len = m+r;
-            for (int i = len - 1; i >= 0; i--) {
+            int len = num.length();
+            for (int i = len-1 ; i >= 0; i--) {
                 if (num[i] == '1')
                     dec_value += base;
                 base = base * 2;
@@ -85,6 +80,7 @@ class hamming{
 				//increasing the bit position.
 				bit++;
 			}
+			showmsg(1);
 			//showing up the message to be sent(data + redundant)
 		}
 		void receiver(){
@@ -111,7 +107,6 @@ class hamming{
 				}
 				bit++;
 			}
-            cout<<ans<<endl;
             char ch;
             cout<<"Do you want to change the bits Y/N -> ";cin>>ch;
 			// if the ans had any occurrence of 1 then there is some fault
@@ -119,28 +114,19 @@ class hamming{
                 int k= (rand() % (m+r));
                 cout<<"Pos Modified is "<<k<<endl;
                 msg[k]-'0'==0 ? msg[k]='1':msg[k]='0';
-                showmsg();
+                showmsg(1);
                 //function call to set the redundant bits
                 cout<<"\t\t Index is "<<k<<endl;
                 msg[k]-'0'==0 ? msg[k]='1':msg[k]='0';
-                showmsg();
+                showmsg(0);
 
-                int val=bin_to_int(msg);
-                cout<<"val is "<<val<<" "<<endl;
-                // if(ans.find('1') != string::npos){
-                //     int power = 1;
-                //     int wrongbit = 0;
-                //     //evaluating the binary expression of ans variable
-                //     for(int i = 0 ; i < ans.size() ; i++){
-                //         if(ans[i]=='1') wrongbit+=power;
-                //         power*=2;
-                //     }
-                //     cout << "bit number " << (m+r-wrongbit) << " is wrong and having error " << endl;
-			    // }
+                int val=bin_to_int();
+                char c=val;
+                cout<<"val is "<<val<<" character is "<<c<<endl;
             }
 			// if the ans dont have any occurrence of 1 then it is correct
 			else{
-				cout << "correct data packet received " << endl;
+				cout << "correct data packet received" << endl;
 			}
 		}
 };
@@ -162,7 +148,7 @@ int main(){
 	for (int i = 0; i < data.length(); i++)
     {
         if(data[i]!=' '){
-            cout<<"\t"<<i+1<<" "<<data[i]<<" "<<"Ascii "<<int(data[i])<<endl;
+            cout<<""<<i+1<<" "<<data[i]<<" "<<"Ascii "<<int(data[i])<<endl;
             string val=ConvertToBinary(data[i]);
             cout<<"Binary of "<<data[i]<<" is "<<val<<endl;
             hamming h(val);
@@ -180,44 +166,64 @@ int main(){
 
 //time complexity = O(nlogn) where , n = databits + redundant bits
 /*
+/tmp/I98FnlUTkk.o
 Enter the data string Hello
-        1 H Ascii 72
+1 H Ascii 72
 Binary of H is 1001000
-power is 16 r is 4
+data is 1001000
+power is 16 redundant bits are 4
 the data packet to be sent is : n n 1 n 0 0 1 n 0 0 0 
 the data packet to be sent is : 0 0 1 1 0 0 1 0 0 0 0 
-Do you want to change the bits Y/N -> y
-bit number 3 is wrong and having error 
+Do you want to change the bits Y/N -> Y
+Pos Modified is 6
+the data packet to be sent is : 0 0 1 1 0 1 1 0 0 0 0 
+		 Index is 6
+the data packet to be Recieved is : 0 0 1 1 0 0 1 0 0 0 0 
+val is 72 character is H
 
-        2 e Ascii 101
+2 e Ascii 101
 Binary of e is 1100101
-power is 16 r is 4
+data is 1100101
+power is 16 redundant bits are 4
 the data packet to be sent is : n n 1 n 1 0 0 n 1 0 1 
 the data packet to be sent is : 0 0 1 1 1 0 0 0 1 0 1 
-Do you want to change the bits Y/N -> n
-correct data packet received 
+Do you want to change the bits Y/N -> N
+correct data packet received
 
-        3 l Ascii 108
+
+3 l Ascii 108
 Binary of l is 1101100
-power is 16 r is 4
+data is 1101100
+power is 16 redundant bits are 4
 the data packet to be sent is : n n 1 n 1 0 1 n 1 0 0 
 the data packet to be sent is : 0 0 1 0 1 0 1 1 1 0 0 
-Do you want to change the bits Y/N -> n
-correct data packet received 
+Do you want to change the bits Y/N -> Y
+Pos Modified is 10
+the data packet to be sent is : 0 0 1 0 1 0 1 1 1 1 0 
+		 Index is 10
+the data packet to be Recieved is : 0 0 1 0 1 0 1 1 1 0 0 
+val is 108 character is l
 
-        4 l Ascii 108
+4 l Ascii 108
 Binary of l is 1101100
-power is 16 r is 4
+data is 1101100
+power is 16 redundant bits are 4
 the data packet to be sent is : n n 1 n 1 0 1 n 1 0 0 
 the data packet to be sent is : 0 0 1 0 1 0 1 1 1 0 0 
-Do you want to change the bits Y/N -> n
-correct data packet received 
+Do you want to change the bits Y/N -> N
+correct data packet received
 
-        5 o Ascii 111
+
+5 o Ascii 111
 Binary of o is 1101111
-power is 16 r is 4
+data is 1101111
+power is 16 redundant bits are 4
 the data packet to be sent is : n n 1 n 1 0 1 n 1 1 1 
 the data packet to be sent is : 1 0 1 0 1 0 1 1 1 1 1 
-Do you want to change the bits Y/N -> n
-correct data packet received 
+Do you want to change the bits Y/N -> Y
+Pos Modified is 6
+the data packet to be sent is : 1 0 1 0 1 1 1 1 1 1 1 
+		 Index is 6
+the data packet to be Recieved is : 1 0 1 0 1 0 1 1 1 1 1 
+val is 111 character is o
 */
