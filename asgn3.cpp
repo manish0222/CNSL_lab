@@ -39,7 +39,7 @@ class hamming{
 		//function to show the whole msg
 		void showmsg(int a){
 			if(a)cout << "the data packet to be sent is : ";
-			else cout << "the data packet to be Recieved is : ";
+			else cout << "the codeword to be Recieved is : ";
 			for(int i = 1 ; i <=m+r ; i++){
 				cout << msg[i] << " ";
 			}
@@ -83,6 +83,15 @@ class hamming{
 			showmsg(1);
 			//showing up the message to be sent(data + redundant)
 		}
+		string binary(int v){
+		    string ans="";
+		    while(v>0){
+		        char c=(v%2+'0');
+		        ans=c+ans;
+		        v=v/2;
+		    }
+		    return ans;
+		}
 		void receiver(){
 			//this ans will store the redundant bits, if they were right then according to even parity they will store 0 else if some error was made in a bit it will store 1
 			string ans = "";
@@ -116,17 +125,29 @@ class hamming{
                 msg[k]-'0'==0 ? msg[k]='1':msg[k]='0';
                 showmsg(1);
                 //function call to set the redundant bits
-                cout<<"\t\t Index is "<<k<<endl;
+                string val1=binary(k);
+                cout<<"\t\t Index is "<<k<<" with binary "<<val1<<endl;
+                
                 msg[k]-'0'==0 ? msg[k]='1':msg[k]='0';
                 showmsg(0);
-
+                cout<<"Dataword extracted out of codeword is "<<data<<endl;
                 int val=bin_to_int();
                 char c=val;
                 cout<<"val is "<<val<<" character is "<<c<<endl;
             }
 			// if the ans dont have any occurrence of 1 then it is correct
 			else{
-				cout << "\tcorrect data packet received" << endl;
+				cout<<"Data recieved is ";
+			    for(int j =1 ; j<=m+r ; j++){
+					cout<<msg[j]<<" ";
+				}cout<<endl;
+				int k2=bin_to_int();
+				char l2;
+				if(k2>='a' and k2<='z') l2=k2;
+				else l2=k2;
+				cout<<"Fetched Datwword out of codeword is "<<data<<endl;
+				cout<<"The Ascii of data recieved is "<<k2<<" character is "<<l2<<endl;
+				cout << "\tcorrect data packet received" <<endl;
 				cout << "\t------------------------------"<<endl;
 			}
 		}
@@ -167,7 +188,7 @@ class hamming_odd{
 		//function to show the whole msg
 		void showmsg(int a){
 			if(a)cout << "the data packet to be sent is : ";
-			else cout << "the data packet to be Recieved is : ";
+			else cout << "the codeword to be Recieved is : ";
 			for(int i = 1 ; i <=m+r ; i++){
 				cout << msg[i] << " ";
 			}
@@ -211,6 +232,15 @@ class hamming_odd{
 			showmsg(1);
 			//showing up the message to be sent(data + redundant)
 		}
+		string binary(int v){
+		    string ans="";
+		    while(v>0){
+		        char c=(v%2+'0');
+		        ans=c+ans;
+		        v=v/2;
+		    }
+		    return ans;
+		}
 		void receiver(){
 			//this ans will store the redundant bits, if they were right then according to even parity they will store 0 else if some error was made in a bit it will store 1
 			string ans = "";
@@ -244,16 +274,28 @@ class hamming_odd{
                 msg[k]-'0'==0 ? msg[k]='1':msg[k]='0';
                 showmsg(1);
                 //function call to set the redundant bits
-                cout<<"\t\t Error at Index "<<k<<endl;
+                string val1=binary(k);
+                cout<<"\t\t Index is "<<k<<" with binary "<<val1<<endl;
+                
                 msg[k]-'0'==0 ? msg[k]='1':msg[k]='0';
                 showmsg(0);
-
+                cout<<"Data worfd fetched out of codeword is "<<data<<endl;
                 int val=bin_to_int();
                 char c=val;
                 cout<<"val is "<<val<<" character is "<<c<<endl;
             }
 			// if the ans dont have any occurrence of 1 then it is correct
 			else{
+			    cout<<"Data recieved is ";
+			    for(int j =1 ; j<=m+r ; j++){
+					cout<<msg[j]<<" ";
+				}cout<<endl;
+				int k2=bin_to_int();
+				char l2;
+				if(k2>='a' and k2<='z') l2=k2;
+				else l2=k2;
+				cout<<"Fetched Datwword out of codeword is "<<data<<endl;
+				cout<<"The binary data recieved is "<<k2<<" character is "<<l2<<endl;
 				cout << "\tcorrect data packet received" <<endl;
 				cout << "\t------------------------------"<<endl;
 			}
