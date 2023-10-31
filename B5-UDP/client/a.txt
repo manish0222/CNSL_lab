@@ -1,0 +1,2 @@
+1st run server : python3 receiver.py 
+2nd run client : python3 sender.py ip_addr(for local:localhost) name_of_file
